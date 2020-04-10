@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "com.example.protobuf";
+option java_outer_classname = "WindGps";
+
+message Wind {
+    repeated Gps gps = 1;
+
+    message Gps {
+        double longitude = 1;
+        double dimension = 2;
+        double coordinate = 3;
+    }
+}

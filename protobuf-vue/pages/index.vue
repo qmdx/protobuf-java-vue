@@ -15,9 +15,6 @@
         <a href="#" @click="getJson" class="button--grey">
           Get Json
         </a>
-        <a href="#" @click="getJsonGzip" class="button--grey">
-          Get Json Gzip
-        </a>
       </div>
     </div>
   </div>
@@ -33,40 +30,29 @@ export default {
     Logo
   },
   methods: {
-    // async asyncData ({ params }) {
-    //   const { data } = await axios.get(`https://my-api/posts/${params.id}`)
-    //   return { title: data.title }
-    // }
     getPb: function () {
+      let start = Date.now();
       axios.get('http://localhost:8080/pb',{
         responseType: 'arraybuffer'
       }).then(res => {
         let wd = protos.Wind.deserializeBinary(new Buffer(res.data, 'binary').toString('base64'))
-        console.log('---wd.length----', wd.getGpsList().length)
-        console.log('---wd----', wd.getGpsList()[0].getDimension())
+        if (wd) {
+          console.log('---wd.length----', wd.getGpsList().length)
+          console.log('---wd----', wd.getGpsList()[0].getDimension())
+          console.log('---getPb--time----', Date.now() - start)
+        }
       }).catch((error) => {
         console.log('---error----', error)
       })
     },
     getJson: function () {
+      let start = Date.now();
       axios({
         method:'get',
         url: 'http://localhost:8080/json',
       }).then(res => {
         console.log('---wd----', res)
-      }).catch((error) => {
-        console.log(error)
-      })
-    },
-    getJsonGzip: function () {
-      axios({
-        method:'get',
-        url: 'http://localhost:8080/json-gzip',
-        headers: {
-          'Content-Type': 'application/octet-stream'
-        }
-      }).then(res => {
-        console.log('---wd----', res)
+        console.log('---getJson--time----', Date.now() - start)
       }).catch((error) => {
         console.log(error)
       })
